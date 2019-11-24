@@ -2,13 +2,12 @@ import express from "express";
 import compression from "compression";  // compresses requests
 import bodyParser from "body-parser";
 import path from "path";
-
-
-// Controllers (route handlers)
+import os from "os";
 import * as homeController from "./controllers/home";
-import * as userController from "./controllers/user";
 import * as apiController from "./controllers/api";
-import * as contactController from "./controllers/contact";
+import ipfsDefaultConfig from "./Common/IPFS/ipfsDefaultConfig";
+import IPFSconnector from "./Common/IPFS/IPFSConnector";
+import logger from "./Common/logger";
 
 
 // Create Express server
@@ -41,11 +40,27 @@ app.get("/", homeController.index);
 
 
 /**
- * API examples routes.
+ * API routes.
  */
-app.get("/api", apiController.getApi);
 app.get("/api/test", apiController.getTest);
+app.get("/api/tx/:tx", apiController.getTx); 
 
+
+const config = ipfsDefaultConfig;
+    config.repo = os.homedir() + "/.ipfsExplorer";
+    config.config = {
+        Addresses: {
+          Swarm: [
+            "/ip4/0.0.0.0/tcp/15012",
+            "/ip4/127.0.0.1/tcp/15013/ws"
+          ],
+          API: "/ip4/127.0.0.1/tcp/6012",
+          Gateway: "/ip4/127.0.0.1/tcp/9192"
+        }
+      };
+
+    IPFSconnector.setConfig(config);
+    IPFSconnector.getInstanceAsync().then(() => logger.info("IPFS started"));
 
 
 export default app;
