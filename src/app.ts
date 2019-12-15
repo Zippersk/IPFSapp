@@ -15,7 +15,7 @@ const app = express();
 
 
 // Express configuration
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 5000);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "pug");
 app.use(compression());
@@ -42,8 +42,10 @@ app.get("/", homeController.index);
 /**
  * API routes.
  */
-app.get("/api/test", apiController.getTest);
-app.get("/api/tx/:tx", apiController.getTx); 
+app.get("/api/get/:cid/:path*?", apiController.get); 
+app.get("/api/:hash/*", apiController.getByHash); 
+app.get("/api/stats", apiController.getStats); 
+
 
 
 const config = ipfsDefaultConfig;
@@ -59,8 +61,8 @@ const config = ipfsDefaultConfig;
         }
       };
 
-    IPFSconnector.setConfig(config);
-    IPFSconnector.getInstanceAsync().then(() => logger.info("IPFS started"));
+IPFSconnector.setConfig(config);
+IPFSconnector.getInstanceAsync().then(() => logger.info("IPFS started"));
 
 
 export default app;
