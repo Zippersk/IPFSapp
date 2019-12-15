@@ -8,14 +8,19 @@ import * as apiController from "./controllers/api";
 import ipfsDefaultConfig from "./Common/IPFS/ipfsDefaultConfig";
 import IPFSconnector from "./Common/IPFS/IPFSConnector";
 import logger from "./Common/logger";
+import {argv} from "yargs";
 
 
 // Create Express server
 const app = express();
 
+let explorerNumber = "1";
+if (argv.explorerNumber) {
+  explorerNumber = argv.explorerNumber.toString();
+}
 
 // Express configuration
-app.set("port", process.env.PORT || 5000);
+app.set("port", process.env.PORT || 500 + explorerNumber);
 app.set("views", path.join(__dirname, "../views"));
 app.set("view engine", "pug");
 app.use(compression());
@@ -49,15 +54,15 @@ app.get("/api/stats", apiController.getStats);
 
 
 const config = ipfsDefaultConfig;
-    config.repo = os.homedir() + "/.ipfsExplorer";
+    config.repo = os.homedir() + "/.ipfsExplorer" + explorerNumber;
     config.config = {
         Addresses: {
           Swarm: [
-            "/ip4/0.0.0.0/tcp/15012",
-            "/ip4/127.0.0.1/tcp/15013/ws"
+            "/ip4/0.0.0.0/tcp/1501" + (parseInt(explorerNumber) * 2),
+            "/ip4/127.0.0.1/tcp/1501" + (parseInt(explorerNumber) * 2 + 1) + "/ws"
           ],
-          API: "/ip4/127.0.0.1/tcp/6012",
-          Gateway: "/ip4/127.0.0.1/tcp/9192"
+          API: "/ip4/127.0.0.1/tcp/601" + explorerNumber,
+          Gateway: "/ip4/127.0.0.1/tcp/919" + explorerNumber
         }
       };
 

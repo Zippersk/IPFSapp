@@ -3,19 +3,22 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [{
-        "type": "node",
-        "request": "launch",
-        "name": "Debug",
-        "program": "${workspaceFolder}/src/server.ts",
-        "preLaunchTask": "tsc: build - tsconfig.json",
-        "outFiles": [
-            "${workspaceFolder}/dist/**/*.js"
-        ],
-        "outputCapture": "std",
-        "console": "integratedTerminal",
-        "skipFiles": [
-            "<node_internals>/**"
-        ],
-    }]
+    "configurations": [
+
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug",
+            "program": "${workspaceFolder}/src/server.ts",
+            "preLaunchTask": "tsc: build - tsconfig.json",
+            "outFiles": [
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "outputCapture": "std",
+            "console": "integratedTerminal",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+        }
+    ]
 }
